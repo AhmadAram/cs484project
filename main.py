@@ -41,7 +41,100 @@ while tracks['next']:
         songs.append(item)
 ids = []
 
-print(len(songs))
+print("Songs Added: " + len(songs))
+print(songs[0]['track']['id'])
+i = 0
+for i in range(len(songs)):
+    Spotifyobj.user_playlist_add_tracks(username,"4SVPwFqykhFf5fqiIIBc21",[songs[i]["track"]["id"]])
+    #playlist in this for loop is for the BadMusic Playlist
+
+#adding country music to the BagMusicPlaylist
+sourcePlaylist = Spotifyobj.user_playlist(username,"37i9dQZF1DX1lVhptIYRda")
+tracks = sourcePlaylist["tracks"]
+songs = tracks["items"]
+
+while tracks['next']:
+    tracks = Spotifyobj.next(tracks)
+    for item in tracks["items"]:
+        songs.append(item)
+ids = []
+
+print("Songs Added: " + len(songs))
+print(songs[0]['track']['id'])
+i = 0
+for i in range(len(songs)):
+    Spotifyobj.user_playlist_add_tracks(username,"4SVPwFqykhFf5fqiIIBc21",[songs[i]["track"]["id"]])
+
+#adding a bunch of playlists to the BadMusic playlist this is one is called Country Christmas
+
+sourcePlaylist = Spotifyobj.user_playlist(username,"37i9dQZF1DX0MuOvUqmxDz")
+tracks = sourcePlaylist["tracks"]
+songs = tracks["items"]
+
+while tracks['next']:
+    tracks = Spotifyobj.next(tracks)
+    for item in tracks["items"]:
+        songs.append(item)
+ids = []
+
+print("Songs Added: " + len(songs))
+print(songs[0]['track']['id'])
+i = 0
+for i in range(len(songs)):
+    Spotifyobj.user_playlist_add_tracks(username,"4SVPwFqykhFf5fqiIIBc21",[songs[i]["track"]["id"]])
+
+#adding songs to BadMusic playlist this playlist
+#playlist: 37i9dQZF1DX8S0uQvJ4gaa
+
+sourcePlaylist = Spotifyobj.user_playlist(username,"37i9dQZF1DX8S0uQvJ4gaa")
+tracks = sourcePlaylist["tracks"]
+songs = tracks["items"]
+
+while tracks['next']:
+    tracks = Spotifyobj.next(tracks)
+    for item in tracks["items"]:
+        songs.append(item)
+ids = []
+
+print("Songs Added: " + len(songs))
+print(songs[0]['track']['id'])
+i = 0
+for i in range(len(songs)):
+    Spotifyobj.user_playlist_add_tracks(username,"4SVPwFqykhFf5fqiIIBc21",[songs[i]["track"]["id"]])
+
+#adding more music to the badMusic playlist
+#playlist id: 37i9dQZF1DX0MuOvUqmxDz
+
+sourcePlaylist = Spotifyobj.user_playlist(username,"37i9dQZF1DX0MuOvUqmxDz")
+tracks = sourcePlaylist["tracks"]
+songs = tracks["items"]
+
+while tracks['next']:
+    tracks = Spotifyobj.next(tracks)
+    for item in tracks["items"]:
+        songs.append(item)
+ids = []
+
+print("Songs Added: " + len(songs))
+print(songs[0]['track']['id'])
+i = 0
+for i in range(len(songs)):
+    Spotifyobj.user_playlist_add_tracks(username,"4SVPwFqykhFf5fqiIIBc21",[songs[i]["track"]["id"]])
+
+#adding songs to BadMusic playlist this playlist
+#playlist: 37i9dQZF1DWYiR2Uqcon0X
+
+sourcePlaylist = Spotifyobj.user_playlist(username,"37i9dQZF1DWYiR2Uqcon0X")
+tracks = sourcePlaylist["tracks"]
+songs = tracks["items"]
+
+while tracks['next']:
+    tracks = Spotifyobj.next(tracks)
+    for item in tracks["items"]:
+        songs.append(item)
+ids = []
+
+print("Songs Added: " + len(songs))
 print(songs[0]['track']['id'])
 i = 0
 for i in range(len(songs)):
