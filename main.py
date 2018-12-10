@@ -43,9 +43,11 @@ ids = []
 
 print("Songs Added: " + str(len(songs)))
 print(songs[0]['track']['id'])
-i = 0
-for i in range(len(songs)):
-    Spotifyobj.user_playlist_add_tracks(username,"4SVPwFqykhFf5fqiIIBc21",[songs[i]["track"]["id"]])
+# add_to_bad_playlist("4SVPwFqykhFf5fqiIIBc21", songs)
+
+# i = 0
+# for i in range(len(songs)):
+#     Spotifyobj.user_playlist_add_tracks(username,"4SVPwFqykhFf5fqiIIBc21",[songs[i]["track"]["id"]])
     #playlist in this for loop is for the BadMusic Playlist
 
 #adding country music to the BagMusicPlaylist
@@ -59,11 +61,13 @@ while tracks['next']:
         songs.append(item)
 ids = []
 
-print("Songs Added: " + len(songs))
+print("Songs Added: " + str(len(songs)))
 print(songs[0]['track']['id'])
-i = 0
-for i in range(len(songs)):
-    Spotifyobj.user_playlist_add_tracks(username,"4SVPwFqykhFf5fqiIIBc21",[songs[i]["track"]["id"]])
+# add_to_bad_playlist("4SVPwFqykhFf5fqiIIBc21", songs)
+
+# i = 0
+# for i in range(len(songs)):
+#     Spotifyobj.user_playlist_add_tracks(username,"4SVPwFqykhFf5fqiIIBc21",[songs[i]["track"]["id"]])
 
 #adding a bunch of playlists to the BadMusic playlist this is one is called Country Christmas
 
@@ -77,11 +81,13 @@ while tracks['next']:
         songs.append(item)
 ids = []
 
-print("Songs Added: " + len(songs))
+print("Songs Added: " + str(len(songs)))
 print(songs[0]['track']['id'])
-i = 0
-for i in range(len(songs)):
-    Spotifyobj.user_playlist_add_tracks(username,"4SVPwFqykhFf5fqiIIBc21",[songs[i]["track"]["id"]])
+# add_to_bad_playlist("4SVPwFqykhFf5fqiIIBc21", songs)
+
+# i = 0
+# for i in range(len(songs)):
+#     Spotifyobj.user_playlist_add_tracks(username,"4SVPwFqykhFf5fqiIIBc21",[songs[i]["track"]["id"]])
 
 #adding songs to BadMusic playlist this playlist
 #playlist: 37i9dQZF1DX8S0uQvJ4gaa
@@ -96,11 +102,13 @@ while tracks['next']:
         songs.append(item)
 ids = []
 
-print("Songs Added: " + len(songs))
+print("Songs Added: " + str(len(songs)))
 print(songs[0]['track']['id'])
-i = 0
-for i in range(len(songs)):
-    Spotifyobj.user_playlist_add_tracks(username,"4SVPwFqykhFf5fqiIIBc21",[songs[i]["track"]["id"]])
+# add_to_bad_playlist("4SVPwFqykhFf5fqiIIBc21", songs)
+
+# i = 0
+# for i in range(len(songs)):
+#     Spotifyobj.user_playlist_add_tracks(username,"4SVPwFqykhFf5fqiIIBc21",[songs[i]["track"]["id"]])
 
 #adding more music to the badMusic playlist
 #playlist id: 37i9dQZF1DX0MuOvUqmxDz
@@ -115,11 +123,13 @@ while tracks['next']:
         songs.append(item)
 ids = []
 
-print("Songs Added: " + len(songs))
+print("Songs Added: " + str(len(songs)))
 print(songs[0]['track']['id'])
-i = 0
-for i in range(len(songs)):
-    Spotifyobj.user_playlist_add_tracks(username,"4SVPwFqykhFf5fqiIIBc21",[songs[i]["track"]["id"]])
+# add_to_bad_playlist("4SVPwFqykhFf5fqiIIBc21", songs)
+
+# i = 0
+# for i in range(len(songs)):
+#     Spotifyobj.user_playlist_add_tracks(username,"4SVPwFqykhFf5fqiIIBc21",[songs[i]["track"]["id"]])
 
 #adding songs to BadMusic playlist this playlist
 #playlist: 37i9dQZF1DWYiR2Uqcon0X
@@ -136,6 +146,12 @@ ids = []
 
 print("Songs Added: {}".format(str(len(songs))))
 print(songs[0]['track']['id'])
-i = 0
-for i in range(len(songs)):
-    Spotifyobj.user_playlist_add_tracks(username, "4SVPwFqykhFf5fqiIIBc21", [songs[i]["track"]["id"]])
+# add_to_bad_playlist("4SVPwFqykhFf5fqiIIBc21", songs)
+
+# i = 0
+# for i in range(len(songs)):
+#     Spotifyobj.user_playlist_add_tracks(username, "4SVPwFqykhFf5fqiIIBc21", [songs[i]["track"]["id"]])
+
+def add_to_bad_playlist(playlistId, songs):
+    for i in range(len(songs)):
+        Spotifyobj.user_playlist_add_tracks(username, playlistId, [songs[i]["track"]["id"]])
