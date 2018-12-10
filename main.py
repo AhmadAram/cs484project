@@ -32,7 +32,7 @@ print(user)
 
 
 #going to add some bad music that i dont like into a playlist we made called BadMusic
-sourcePlaylist = Spotifyobj.user_playlist(username,"37i9dQZF1DWTcqUzwhNmKv")
+sourcePlaylist = Spotifyobj.user_playlist(username, "37i9dQZF1DWTcqUzwhNmKv")
 tracks = sourcePlaylist["tracks"]
 songs = tracks["items"]
 
