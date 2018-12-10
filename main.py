@@ -1,75 +1,52 @@
-import pickle
-import pylast
-import pandas
-import numpy
+
 # import pyechonest
+import spotipy
+import spotipy.util as utility
+import sys
+import os
+import webbrowser
+import json
+from json.decoder import JSONDecodeError
+
+#username = sys.argv[1]
+clientId = "ce7456ff192c41a28dd9b8bc55bb845c"
+secret = "55bbc589f0d64cd0b711b309320c5f98"
+scope = "user-library-read playlist-read-private playlist-modify-private playlist-read-collaborative playlist-modify-public"
+redirectURI = 'http://google.com/'
+username = 'ahmadaram34'
+
+#this gets the authentiaction token for us to access the account through spotify
+try:
+    token = utility.prompt_for_user_token(username=username,scope=scope,client_id=clientId,client_secret=secret,redirect_uri=redirectURI)
+except:
+    token = utility.prompt_for_user_token(username)
 
 
-def preprocess_users(x=None):
-    """
-    This method accepts optional parameter x to specify an amount of user data to pre-process.
-    This builds a basic list of the user IDs and saves them using the pickle library.
+#craeting spotify object
 
-    :param x: Int - default None
-    """
-    with open("assets/train_triplets.txt", "r") as infile:
-        if x is None:
-            users = [x.split()[1] for x in infile]
-        else:
-            n = 0
-            users = []
-            for line in infile:
-                if n == x:
-                    break
-                users.append(line.split()[0])
-                n += 1
-    with open('assets/pickle_dumps/users.dat', 'wb+') as outfile:
-        pickle.dump(users, outfile)
+Spotifyobj = spotipy.Spotify(auth=token)
+
+user = Spotifyobj.current_user()
+print(user)
+#print(json.dump(user, sort_keys=True, indent=4))
 
 
-def load_data(file):
-    """
-    Loads the pickle data that was pre-processed.
+#going to add some bad music that i dont like into a playlist we made called BadMusic
+sourcePlaylist = Spotifyobj.user_playlist(username,"37i9dQZF1DWTcqUzwhNmKv")
+tracks = sourcePlaylist["tracks"]
+songs = tracks["items"]
 
-    :param file: String - pre-processed file name
-    :return:
-    """
-    with open('assets/pickle_dumps/' + file, 'rb') as infile:
-        return pickle.load(infile)
+while tracks['next']:
+    tracks = Spotifyobj.next(tracks)
+    for item in tracks["items"]:
+        songs.append(item)
+ids = []
 
-
-def main():
-    preprocess_users(100)
-    print(load_data('users.dat'))
-    # API_KEY = "55b31ae7d1992d0523876c1a27b86d80"
-    # API_SECRET = "4746d5e29db93c379645934051aef021"
-    #
-    # username = "deathfire260"
-    # password_hash = pylast.md5("kopzub-cihrux-0hoKji")
-    #
-    # network = pylast.LastFMNetwork(api_key=API_KEY, api_secret=API_SECRET,
-    #                                username=username, password_hash=password_hash)
-    #
-    # artist = network.get_artist("Mastodon")
-    # # print(artist.get_top_albums())
-    # # print(artist.get_top_tags())
-    # # print(artist.get_top_tracks())
-    # # print(artist.get_similar())
-    # [print("{}\n".format(x)) for x in artist.get_top_albums()[0]]
-    # [print("{}\n".format(x)) for x in artist.get_top_tags()[0]]
-    # [print("{}\n".format(x)) for x in artist.get_top_tracks()[0]]
-    # [print("{}\n".format(x)) for x in artist.get_similar()[0]]
-    #
-    # artist = network.get_artist("Paganini")
-    # # print(artist.get_top_albums())
-    # # print(artist.get_top_tags())
-    # # print(artist.get_top_tracks())
-    # # print(artist.get_similar())
-    # [print("{}\n".format(x)) for x in artist.get_top_albums()[0]]
-    # [print("{}\n".format(x)) for x in artist.get_top_tags()[0]]
-    # [print("{}\n".format(x)) for x in artist.get_top_tracks()[0]]
-    # [print("{}\n".format(x)) for x in artist.get_similar()[0]]
+print(len(songs))
+print(songs[0]['track']['id'])
+i = 0
+for i in range(len(songs)):
+    Spotifyobj.user_playlist_add_tracks(username,"4SVPwFqykhFf5fqiIIBc21",[songs[i]["track"]["id"]])
 
 
-if __name__ == "__main__":
-    main()
+
