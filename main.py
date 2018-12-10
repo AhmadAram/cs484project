@@ -59,7 +59,7 @@ while tracks['next']:
         songs.append(item)
 ids = []
 
-print("Songs Added: " + len(songs))
+print("Songs Added: " + str(len(songs)))
 print(songs[0]['track']['id'])
 i = 0
 for i in range(len(songs)):
@@ -77,7 +77,7 @@ while tracks['next']:
         songs.append(item)
 ids = []
 
-print("Songs Added: " + len(songs))
+print("Songs Added: " + str(len(songs)))
 print(songs[0]['track']['id'])
 i = 0
 for i in range(len(songs)):
@@ -96,7 +96,7 @@ while tracks['next']:
         songs.append(item)
 ids = []
 
-print("Songs Added: " + len(songs))
+print("Songs Added: " + str(len(songs)))
 print(songs[0]['track']['id'])
 i = 0
 for i in range(len(songs)):
@@ -115,7 +115,7 @@ while tracks['next']:
         songs.append(item)
 ids = []
 
-print("Songs Added: " + len(songs))
+print("Songs Added: " + str(len(songs)))
 print(songs[0]['track']['id'])
 i = 0
 for i in range(len(songs)):
@@ -139,3 +139,5 @@ print(songs[0]['track']['id'])
 i = 0
 for i in range(len(songs)):
     Spotifyobj.user_playlist_add_tracks(username, "4SVPwFqykhFf5fqiIIBc21", [songs[i]["track"]["id"]])
+
+######THIS PORTION WILL ADD GOOD PLAYLISTS TO THE GOODPLAYLIST playlist, and once this is done we compare them
