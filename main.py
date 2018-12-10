@@ -41,7 +41,7 @@ while tracks['next']:
         songs.append(item)
 ids = []
 
-print("Songs Added: " + len(songs))
+print("Songs Added: " + str(len(songs)))
 print(songs[0]['track']['id'])
 i = 0
 for i in range(len(songs)):
@@ -134,7 +134,7 @@ while tracks['next']:
         songs.append(item)
 ids = []
 
-print("Songs Added: " + len(songs))
+print("Songs Added: {}".format(str(len(songs))))
 print(songs[0]['track']['id'])
 i = 0
 for i in range(len(songs)):
