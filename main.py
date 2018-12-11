@@ -23,8 +23,8 @@ secret = "55bbc589f0d64cd0b711b309320c5f98"
 scope = "user-library-read playlist-read-private playlist-modify-private playlist-read-collaborative playlist-modify-public"
 redirectURI = 'http://google.com/'
 username = 'ahmadaram34'
-badPlaylistId = '1opbiHthRgzCcQy6Je8trd'
-goodPlaylistId = '4idPs093j82aPIaAmzh1XO'
+badPlaylistId = '4SVPwFqykhFf5fqiIIBc21'
+goodPlaylistId = '4cAyKcVe0iUmFoorM3XpEL'
 
 # this gets the authentiaction token for us to access the account through spotify
 try:
@@ -45,7 +45,9 @@ print(user)
 
 
 def add_to_bad_playlist():
-    badMusic = ["37i9dQZF1DWTcqUzwhNmKv"]
+    badMusic = ["37i9dQZF1DWTcqUzwhNmKv", "37i9dQZF1DX1lVhptIYRda",
+                "37i9dQZF1DX0MuOvUqmxDz", "37i9dQZF1DX8S0uQvJ4gaa",
+                "37i9dQZF1DX0MuOvUqmxDz", "37i9dQZF1DWYiR2Uqcon0X"]
     for playlist in badMusic:
         sourcePlaylist = Spotifyobj.user_playlist(username, playlist)
         tracks = sourcePlaylist["tracks"]
@@ -63,7 +65,8 @@ def add_to_bad_playlist():
 
 
 def add_to_good_playlist():
-    goodMusic = {"37i9dQZEVXbLRQDuF5jeBp"}
+    goodMusic = {"37i9dQZF1DX4dyzvuaRJ0n", "37i9dQZF1DX0BcQWzuB7ZO", "37i9dQZF1DX8tZsk68tuDw",
+                 "37i9dQZF1DX0hvSv9Rf41p", "37i9dQZF1DXaXB8fQg7xif", "37i9dQZF1DXcZDD7cfEKhW"}
 
     for playlist in goodMusic:
         sourcePlaylist = Spotifyobj.user_playlist(username, playlist)
@@ -93,7 +96,7 @@ def getGoodSongsIdFeatures():
     goodSongIDs = []
     for i in range(len(good_songList) - 500):
         goodSongIDs.append(good_songList[i]['track']['id'])
-    print(goodSongIDs)
+    #print(goodSongIDs)
 
     features = []
     for i in range(0, len(goodSongIDs)):
@@ -115,7 +118,7 @@ def bad_playlist_idsFeatures():
     ids = []
     for i in range(len(songs) - 500):
         ids.append(songs[i]['track']['id'])
-    print(ids)
+    #print(ids)
 
     features = []
     for i in range(0, len(ids)):
@@ -130,26 +133,22 @@ def bad_playlist_idsFeatures():
 
 
 def TrainTestClassification(goodSongFeatures,badSongFeatures):
-    goodFrame = pd.DataFrame(goodSongFeatures)
-    badFrame = pd.DataFrame(badSongFeatures)
-    frames = [goodFrame,badFrame]
-    trainingData = pd.concat(frames)
-    train,test = train_test_split(trainingData,test_size=0.40)
+    trainingData = panda.DataFrame(goodSongFeatures)
+    train,test = train_test_split(trainingData,test_size=0.25)
     features = ["danceability","loudness","valence","acousticness","key"]
     train1 = train[features]
     train2 = train["target"]
     test1 = test[features]
     test2 = test["target"]
 
-    tree = DecisionTreeClassifier(min_samples_split=100)
+    tree = DecisionTreeClassifier(min_samples_split=50)
     decisionTree = tree.fit(train1,train2)
     predict1 = tree.predict(test1)
     accy = accuracy_score(test2,predict1) *100
     print("Accuracy for Decision Tree:",round(accy,1),"%")
-    print(trainingData)
 
-add_to_bad_playlist()
-add_to_good_playlist()
+#add_to_bad_playlist()
+#add_to_good_playlist()
 goodSongFeatures = getGoodSongsIdFeatures()
 badSongFeatures = bad_playlist_idsFeatures()
 TrainTestClassification(goodSongFeatures,badSongFeatures)
@@ -184,4 +183,5 @@ plt.hist(badFrame['valence'])
 plt.show()
 # goodFrame.plot(x=, y=goodFrame['valence'])
 # badFrame.plot()
-
+features = pd.merge(goodFrame, badFrame)
+print(features)
