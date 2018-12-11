@@ -23,8 +23,8 @@ secret = "55bbc589f0d64cd0b711b309320c5f98"
 scope = "user-library-read playlist-read-private playlist-modify-private playlist-read-collaborative playlist-modify-public"
 redirectURI = 'http://google.com/'
 username = 'ahmadaram34'
-badPlaylistId = '50U9rtNbvgVVzj3ujj3W6E'
-goodPlaylistId = '6UWatUup3LEpGIlQWyXz2N'
+badPlaylistId = '5W6pA4C8gC7T5Kdx4wBjU6'
+goodPlaylistId = '3LiHlnnWae4GaeJ5mfZacG'
 
 # this gets the authentiaction token for us to access the account through spotify
 try:
@@ -45,7 +45,7 @@ print(user)
 
 
 def add_to_bad_playlist():
-    badMusic = ["37i9dQZF1DX1lVhptIYRda","5YSpQCyxpQ84Jv9AedJMBQ"]
+    badMusic = ["37i9dQZF1DX1lVhptIYRda"]
     for playlist in badMusic:
         sourcePlaylist = Spotifyobj.user_playlist(username, playlist)
         tracks = sourcePlaylist["tracks"]
@@ -134,28 +134,38 @@ def bad_playlist_idsFeatures():
 def TrainTestClassification(goodSongFeatures,badSongFeatures):
     bad = panda.DataFrame(badSongFeatures)
     good = panda.DataFrame(goodSongFeatures)
+    bad = bad.drop_duplicates()
+    good = good.drop_duplicates()
     merge = [bad,good]
     trainingData = panda.concat(merge)
     #trainingData = panda.merge(bad,good)
 
-    train,test = train_test_split(trainingData,test_size=0.20)
-    features = ["danceability","loudness","valence","acousticness","key"]
+    train,test = train_test_split(trainingData,test_size=0.15)
+    features = ["danceability","loudness","valence","acousticness","key","instrumentalness",
+                "acousticness","speechiness"]
     train1 = train[features]
     train2 = train["target"]
     test1 = test[features]
     test2 = test["target"]
+    print("DATAFRAMES GOOD THEN BAD SONGS")
+    print(good)
+    print(bad)
+    print("TRAIN DATA######")
+    print(train)
+    print("TEST DATA#######")
+    print(test)
 
-    tree = DecisionTreeClassifier(min_samples_split=100)
-    decisionTree = tree.fit(train1,train2)
-    predict1 = tree.predict(test1)
-    accy = accuracy_score(test2,predict1) *100
+    tempTree = DecisionTreeClassifier(min_samples_split=150)
+    dt = tempTree.fit(train1,train2)
+    predict = tempTree.predict(test1)
+    accy = accuracy_score(test2,predict) *100
     print("Accuracy for Decision Tree:",round(accy,1),"%")
 
-    knn = KNeighborsClassifier(3)
-    knn.fit(train1,train2)
-    knn_pred = tree.predict(test1)
-    score = accuracy_score(test2,knn_pred)*100
-    print("KNN IS ",round(score,1),"%")
+    #knn = KNeighborsClassifier(3)
+    #knn.fit(train1,train2)
+    #knn_pred = tree.predict(test1)
+    #score = accuracy_score(test2,knn_pred)*100
+    #print("KNN IS ",round(score,1),"%")
 
 
 
