@@ -83,12 +83,39 @@ def getGoodSongsIdFeatures():
         goodSongIDs.append(good_songList[i]['track']['id'])
     print(goodSongIDs)
 
-    goodsongFeatures = []
+    features = []
     for i in range(0,len(goodSongIDs)):
+        audiofeatures = Spotifyobj.audio_features(goodSongIDs[i:i+50])
+        for track in audiofeatures:
+            features.append(track)
+            features[-1]['target'] = 1
+    print(features)
+
+def bad_playlist_idsFeatures():
+    tracks = Spotifyobj.user_playlist(username, badPlaylistId)['tracks']
+    songs = tracks['items']
+    # songs = [[x for x in tracks['items']] for y in tracks['next']]
+    while tracks['next']:
+        tracks = Spotifyobj.next(tracks)
+        songs += [x for x in tracks['items']]
+    ids = []
+    for i in range(len(songs) - 500):
+        ids.append(songs[i]['track']['id'])
+    print(ids)
+
+    features = []
+    for i in range(0, len(ids)):
+        audiofeatures = Spotifyobj.audio_features(ids[i:i + 50])
+        for track in audiofeatures:
+            features.append(track)
+            features[-1]['target'] = 1
+    print(features)
+
 
 #add_to_bad_playlist()
 #add_to_good_playlist()
 getGoodSongsIdFeatures()
+bad_playlist_idsFeatures()
 
 
 
