@@ -23,8 +23,8 @@ secret = "55bbc589f0d64cd0b711b309320c5f98"
 scope = "user-library-read playlist-read-private playlist-modify-private playlist-read-collaborative playlist-modify-public"
 redirectURI = 'http://google.com/'
 username = 'ahmadaram34'
-badPlaylistId = '4SVPwFqykhFf5fqiIIBc21'
-goodPlaylistId = '4cAyKcVe0iUmFoorM3XpEL'
+badPlaylistId = '5W6pA4C8gC7T5Kdx4wBjU6'
+goodPlaylistId = '3LiHlnnWae4GaeJ5mfZacG'
 
 # this gets the authentiaction token for us to access the account through spotify
 try:
@@ -45,14 +45,12 @@ print(user)
 
 
 def add_to_bad_playlist():
-    badMusic = ["37i9dQZF1DWTcqUzwhNmKv", "37i9dQZF1DX1lVhptIYRda",
-                "37i9dQZF1DX0MuOvUqmxDz", "37i9dQZF1DX8S0uQvJ4gaa",
-                "37i9dQZF1DX0MuOvUqmxDz", "37i9dQZF1DWYiR2Uqcon0X"]
+    badMusic = ["37i9dQZF1DX1lVhptIYRda"]
     for playlist in badMusic:
         sourcePlaylist = Spotifyobj.user_playlist(username, playlist)
         tracks = sourcePlaylist["tracks"]
         songs = tracks["items"]
-        while tracks["next"]:
+        while tracks['next']:
             tracks = Spotifyobj.next(tracks)
             for item in tracks["items"]:
                 songs.append(item)
@@ -65,8 +63,7 @@ def add_to_bad_playlist():
 
 
 def add_to_good_playlist():
-    goodMusic = {"37i9dQZF1DX4dyzvuaRJ0n", "37i9dQZF1DX0BcQWzuB7ZO", "37i9dQZF1DX8tZsk68tuDw",
-                 "37i9dQZF1DX0hvSv9Rf41p", "37i9dQZF1DXaXB8fQg7xif", "37i9dQZF1DXcZDD7cfEKhW"}
+    goodMusic = {"37i9dQZEVXbLRQDuF5jeBp"}
 
     for playlist in goodMusic:
         sourcePlaylist = Spotifyobj.user_playlist(username, playlist)
@@ -116,7 +113,7 @@ def bad_playlist_idsFeatures():
         tracks = Spotifyobj.next(tracks)
         songs += [x for x in tracks['items']]
     ids = []
-    for i in range(len(songs) - 500):
+    for i in range(len(songs)):
         ids.append(songs[i]['track']['id'])
     #print(ids)
 
@@ -135,12 +132,15 @@ def bad_playlist_idsFeatures():
 def TrainTestClassification(goodSongFeatures,badSongFeatures):
     bad = panda.DataFrame(badSongFeatures)
     good = panda.DataFrame(goodSongFeatures)
+    bad = bad.drop_duplicates()
+    good = good.drop_duplicates()
     merge = [bad,good]
     trainingData = panda.concat(merge)
     #trainingData = panda.merge(bad,good)
 
-    train,test = train_test_split(trainingData,test_size=0.40)
-    features = ["danceability","loudness","valence","acousticness","key"]
+    train,test = train_test_split(trainingData,test_size=0.15)
+    features = ["danceability","loudness","valence","acousticness","key","instrumentalness",
+                "acousticness","speechiness"]
     train1 = train[features]
     train2 = train["target"]
     test1 = test[features]
@@ -161,6 +161,7 @@ print("ADDING TO GOOD SONGS")
 #add_to_good_playlist()
 print("GETTING GOOD SONGS")
 goodSongFeatures = getGoodSongsIdFeatures()
+print("GETTING BAD SONGS FEATURES")
 badSongFeatures = bad_playlist_idsFeatures()
 TrainTestClassification(goodSongFeatures,badSongFeatures)
 
