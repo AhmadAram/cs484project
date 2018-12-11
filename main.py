@@ -108,8 +108,6 @@ def getGoodSongsIdFeatures():
     return features
 
     #print(features)
-    return features
-
 def bad_playlist_idsFeatures():
     tracks = Spotifyobj.user_playlist(username, badPlaylistId)['tracks']
     songs = tracks['items']
@@ -134,39 +132,6 @@ def bad_playlist_idsFeatures():
 
 
 
-# add_to_bad_playlist()
-# add_to_good_playlist()
-# goodFeatures = getGoodSongsIdFeatures()
-# badFeatures = bad_playlist_idsFeatures()
-
-if not os.path.exists('goodFeatures.dat'):
-    pickle.dump(goodFeatures, open('goodFeatures.dat', 'wb+'))
-else:
-    goodFeatures = pickle.load(open('goodFeatures.dat', 'rb'))
-
-if not os.path.exists('badFeatures.dat'):
-    pickle.dump(badFeatures, open('badFeatures.dat', 'wb+'))
-else:
-    badFeatures = pickle.load(open('badFeatures.dat', 'rb'))
-
-goodFrame = pd.DataFrame(goodFeatures)
-badFrame = pd.DataFrame(badFeatures)
-
-# print(goodFrame)
-_,ax = plt.subplots()
-ax.set_xlabel('valence')
-ax.set_ylabel('features')
-ax.set_title(r'Good Song Valence')
-plt.hist(goodFrame['valence'])
-_, bx = plt.subplots()
-bx.set_xlabel('valence')
-bx.set_ylabel('features')
-bx.set_title(r'Bad Song Valence')
-plt.hist(badFrame['valence'])
-plt.show()
-# goodFrame.plot(x=, y=goodFrame['valence'])
-# badFrame.plot()
-
 def TrainTestClassification(goodSongFeatures,badSongFeatures):
     trainingData = panda.DataFrame(goodSongFeatures)
     train,test = train_test_split(trainingData,test_size=0.25)
@@ -187,6 +152,37 @@ def TrainTestClassification(goodSongFeatures,badSongFeatures):
 goodSongFeatures = getGoodSongsIdFeatures()
 badSongFeatures = bad_playlist_idsFeatures()
 TrainTestClassification(goodSongFeatures,badSongFeatures)
+
+
+
+
+if not os.path.exists('goodFeatures.dat'):
+    pickle.dump(goodSongFeatures, open('goodFeatures.dat', 'wb+'))
+else:
+    goodFeatures = pickle.load(open('goodFeatures.dat', 'rb'))
+
+if not os.path.exists('badFeatures.dat'):
+    pickle.dump(badSongFeatures, open('badFeatures.dat', 'wb+'))
+else:
+    badFeatures = pickle.load(open('badFeatures.dat', 'rb'))
+
+goodFrame = pd.DataFrame(goodSongFeatures)
+badFrame = pd.DataFrame(badSongFeatures)
+
+# print(goodFrame)
+_,ax = plt.subplots()
+ax.set_xlabel('valence')
+ax.set_ylabel('features')
+ax.set_title(r'Good Song Valence')
+plt.hist(goodFrame['valence'])
+_, bx = plt.subplots()
+bx.set_xlabel('valence')
+bx.set_ylabel('features')
+bx.set_title(r'Bad Song Valence')
+plt.hist(badFrame['valence'])
+plt.show()
+# goodFrame.plot(x=, y=goodFrame['valence'])
+# badFrame.plot()
 
 
 
