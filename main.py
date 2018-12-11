@@ -6,6 +6,9 @@ import os
 import webbrowser
 import json
 from json.decoder import JSONDecodeError
+import pandas as pd
+import matplotlib.pyplot as plt
+import pickle
 
 # username = sys.argv[1]
 clientId = "ce7456ff192c41a28dd9b8bc55bb845c"
@@ -29,12 +32,14 @@ Spotifyobj = spotipy.Spotify(auth=token)
 
 user = Spotifyobj.current_user()
 print(user)
+
+
 # print(json.dump(user, sort_keys=True, indent=4))
 
 
 def add_to_bad_playlist():
-    badMusic = ["37i9dQZF1DWTcqUzwhNmKv","37i9dQZF1DX1lVhptIYRda",
-                "37i9dQZF1DX0MuOvUqmxDz","37i9dQZF1DX8S0uQvJ4gaa",
+    badMusic = ["37i9dQZF1DWTcqUzwhNmKv", "37i9dQZF1DX1lVhptIYRda",
+                "37i9dQZF1DX0MuOvUqmxDz", "37i9dQZF1DX8S0uQvJ4gaa",
                 "37i9dQZF1DX0MuOvUqmxDz", "37i9dQZF1DWYiR2Uqcon0X"]
     for playlist in badMusic:
         sourcePlaylist = Spotifyobj.user_playlist(username, playlist)
@@ -47,13 +52,14 @@ def add_to_bad_playlist():
         ids = []
         print(len(songs))
         print(songs[0]['track']['id'])
-        i=0
+        i = 0
         for i in range(len(songs)):
-            Spotifyobj.user_playlist_add_tracks(username,badPlaylistId,[songs[i]["track"]["id"]])
+            Spotifyobj.user_playlist_add_tracks(username, badPlaylistId, [songs[i]["track"]["id"]])
+
 
 def add_to_good_playlist():
-    goodMusic = {"37i9dQZF1DX4dyzvuaRJ0n","37i9dQZF1DX0BcQWzuB7ZO","37i9dQZF1DX8tZsk68tuDw",
-                 "37i9dQZF1DX0hvSv9Rf41p","37i9dQZF1DXaXB8fQg7xif","37i9dQZF1DXcZDD7cfEKhW"}
+    goodMusic = {"37i9dQZF1DX4dyzvuaRJ0n", "37i9dQZF1DX0BcQWzuB7ZO", "37i9dQZF1DX8tZsk68tuDw",
+                 "37i9dQZF1DX0hvSv9Rf41p", "37i9dQZF1DXaXB8fQg7xif", "37i9dQZF1DXcZDD7cfEKhW"}
 
     for playlist in goodMusic:
         sourcePlaylist = Spotifyobj.user_playlist(username, playlist)
@@ -66,11 +72,13 @@ def add_to_good_playlist():
         ids = []
         print(len(songs))
         print(songs[0]['track']['id'])
-        i=0
+        i = 0
         for i in range(len(songs)):
-            Spotifyobj.user_playlist_add_tracks(username,goodPlaylistId,[songs[i]["track"]["id"]])
+            Spotifyobj.user_playlist_add_tracks(username, goodPlaylistId, [songs[i]["track"]["id"]])
+
+
 def getGoodSongsIdFeatures():
-    goodPlaylist = Spotifyobj.user_playlist(username,goodPlaylistId)
+    goodPlaylist = Spotifyobj.user_playlist(username, goodPlaylistId)
 
     good_trackList = goodPlaylist["tracks"]
     good_songList = good_trackList["items"]
@@ -79,17 +87,19 @@ def getGoodSongsIdFeatures():
         for item in good_trackList["items"]:
             good_songList.append(item)
     goodSongIDs = []
-    for i in range(len(good_songList)-500):
+    for i in range(len(good_songList) - 500):
         goodSongIDs.append(good_songList[i]['track']['id'])
     print(goodSongIDs)
 
     features = []
-    for i in range(0,len(goodSongIDs)):
-        audiofeatures = Spotifyobj.audio_features(goodSongIDs[i:i+50])
+    for i in range(0, len(goodSongIDs)):
+        audiofeatures = Spotifyobj.audio_features(goodSongIDs[i:i + 50])
         for track in audiofeatures:
             features.append(track)
             features[-1]['target'] = 1
     print(features)
+    return features
+
 
 def bad_playlist_idsFeatures():
     tracks = Spotifyobj.user_playlist(username, badPlaylistId)['tracks']
@@ -110,12 +120,39 @@ def bad_playlist_idsFeatures():
             features.append(track)
             features[-1]['target'] = 1
     print(features)
-
-
-#add_to_bad_playlist()
-#add_to_good_playlist()
-getGoodSongsIdFeatures()
-bad_playlist_idsFeatures()
+    return features
 
 
 
+# add_to_bad_playlist()
+# add_to_good_playlist()
+# goodFeatures = getGoodSongsIdFeatures()
+# badFeatures = bad_playlist_idsFeatures()
+
+if not os.path.exists('goodFeatures.dat'):
+    pickle.dump(goodFeatures, open('goodFeatures.dat', 'wb+'))
+else:
+    goodFeatures = pickle.load(open('goodFeatures.dat', 'rb'))
+
+if not os.path.exists('badFeatures.dat'):
+    pickle.dump(badFeatures, open('badFeatures.dat', 'wb+'))
+else:
+    badFeatures = pickle.load(open('badFeatures.dat', 'rb'))
+
+goodFrame = pd.DataFrame(goodFeatures)
+badFrame = pd.DataFrame(badFeatures)
+
+# print(goodFrame)
+_,ax = plt.subplots()
+ax.set_xlabel('valence')
+ax.set_ylabel('features')
+ax.set_title(r'Good Song Valence')
+plt.hist(goodFrame['valence'])
+_, bx = plt.subplots()
+bx.set_xlabel('valence')
+bx.set_ylabel('features')
+bx.set_title(r'Bad Song Valence')
+plt.hist(badFrame['valence'])
+plt.show()
+# goodFrame.plot(x=, y=goodFrame['valence'])
+# badFrame.plot()
