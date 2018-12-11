@@ -133,22 +133,33 @@ def bad_playlist_idsFeatures():
 
 
 def TrainTestClassification(goodSongFeatures,badSongFeatures):
-    trainingData = panda.DataFrame(goodSongFeatures)
-    train,test = train_test_split(trainingData,test_size=0.25)
+    bad = panda.DataFrame(badSongFeatures)
+    good = panda.DataFrame(goodSongFeatures)
+    merge = [bad,good]
+    trainingData = panda.concat(merge)
+    #trainingData = panda.merge(bad,good)
+
+    train,test = train_test_split(trainingData,test_size=0.40)
     features = ["danceability","loudness","valence","acousticness","key"]
     train1 = train[features]
     train2 = train["target"]
     test1 = test[features]
     test2 = test["target"]
 
-    tree = DecisionTreeClassifier(min_samples_split=50)
+    tree = DecisionTreeClassifier(min_samples_split=100)
     decisionTree = tree.fit(train1,train2)
     predict1 = tree.predict(test1)
     accy = accuracy_score(test2,predict1) *100
     print("Accuracy for Decision Tree:",round(accy,1),"%")
 
+
+
+
+print("ADDING SONGS TO BAD SONGS")
 #add_to_bad_playlist()
+print("ADDING TO GOOD SONGS")
 #add_to_good_playlist()
+print("GETTING GOOD SONGS")
 goodSongFeatures = getGoodSongsIdFeatures()
 badSongFeatures = bad_playlist_idsFeatures()
 TrainTestClassification(goodSongFeatures,badSongFeatures)
