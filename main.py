@@ -28,130 +28,18 @@ Spotifyobj = spotipy.Spotify(auth=token)
 
 user = Spotifyobj.current_user()
 print(user)
-# print(json.dump(user, sort_keys=True, indent=4))
 
+def bad_playlist_ids():
+    tracks = Spotifyobj.user_playlist(username, badPlaylistId)['tracks']
+    songs = tracks['items']
+    # songs = [[x for x in tracks['items']] for y in tracks['next']]
+    while tracks['next']:
+        tracks = Spotifyobj.next(tracks)
+        songs += [x for x in tracks['items']]
+    ids = []
+    for i in range(len(songs) - 500):
+        ids.append(songs[i]['track']['id'])
 
-# going to add some bad music that i dont like into a playlist we made called BadMusic
-# sourcePlaylist = Spotifyobj.user_playlist(username, "37i9dQZF1DWTcqUzwhNmKv")
-# tracks = sourcePlaylist["tracks"]
-# songs = tracks["items"]
-#
-# while tracks['next']:
-#     tracks = Spotifyobj.next(tracks)
-#     for item in tracks["items"]:
-#         songs.append(item)
-# ids = []
-#
-# print("Songs Added: " + str(len(songs)))
-# print(songs[0]['track']['id'])
-# add_to_bad_playlist(songs)
-
-# i = 0
-# for i in range(len(songs)):
-#     Spotifyobj.user_playlist_add_tracks(username,[songs[i]["track"]["id"]])
-    #playlist in this for loop is for the BadMusic Playlist
-
-#adding country music to the BagMusicPlaylist
-# sourcePlaylist = Spotifyobj.user_playlist(username,"37i9dQZF1DX1lVhptIYRda")
-# tracks = sourcePlaylist["tracks"]
-# songs = tracks["items"]
-#
-# while tracks['next']:
-#     tracks = Spotifyobj.next(tracks)
-#     for item in tracks["items"]:
-#         songs.append(item)
-# ids = []
-#
-# print("Songs Added: " + str(len(songs)))
-# print(songs[0]['track']['id'])
-# add_to_bad_playlist(songs)
-
-# i = 0
-# for i in range(len(songs)):
-#     Spotifyobj.user_playlist_add_tracks(username,[songs[i]["track"]["id"]])
-
-#adding a bunch of playlists to the BadMusic playlist this is one is called Country Christmas
-
-# sourcePlaylist = Spotifyobj.user_playlist(username,"37i9dQZF1DX0MuOvUqmxDz")
-# tracks = sourcePlaylist["tracks"]
-# songs = tracks["items"]
-#
-# while tracks['next']:
-#     tracks = Spotifyobj.next(tracks)
-#     for item in tracks["items"]:
-#         songs.append(item)
-# ids = []
-#
-# print("Songs Added: " + str(len(songs)))
-# print(songs[0]['track']['id'])
-# add_to_bad_playlist(songs)
-
-# i = 0
-# for i in range(len(songs)):
-#     Spotifyobj.user_playlist_add_tracks(username,[songs[i]["track"]["id"]])
-
-#adding songs to BadMusic playlist this playlist
-#playlist: 37i9dQZF1DX8S0uQvJ4gaa
-
-# sourcePlaylist = Spotifyobj.user_playlist(username,"37i9dQZF1DX8S0uQvJ4gaa")
-# tracks = sourcePlaylist["tracks"]
-# songs = tracks["items"]
-#
-# while tracks['next']:
-#     tracks = Spotifyobj.next(tracks)
-#     for item in tracks["items"]:
-#         songs.append(item)
-# ids = []
-#
-# print("Songs Added: " + str(len(songs)))
-# print(songs[0]['track']['id'])
-# add_to_bad_playlist(songs)
-
-# i = 0
-# for i in range(len(songs)):
-#     Spotifyobj.user_playlist_add_tracks(username,[songs[i]["track"]["id"]])
-
-#adding more music to the badMusic playlist
-#playlist id: 37i9dQZF1DX0MuOvUqmxDz
-
-# sourcePlaylist = Spotifyobj.user_playlist(username,"37i9dQZF1DX0MuOvUqmxDz")
-# tracks = sourcePlaylist["tracks"]
-# songs = tracks["items"]
-#
-# while tracks['next']:
-#     tracks = Spotifyobj.next(tracks)
-#     for item in tracks["items"]:
-#         songs.append(item)
-# ids = []
-#
-# print("Songs Added: " + str(len(songs)))
-# print(songs[0]['track']['id'])
-# add_to_bad_playlist(songs)
-
-# i = 0
-# for i in range(len(songs)):
-#     Spotifyobj.user_playlist_add_tracks(username,[songs[i]["track"]["id"]])
-
-#adding songs to BadMusic playlist this playlist
-#playlist: 37i9dQZF1DWYiR2Uqcon0X
-
-# sourcePlaylist = Spotifyobj.user_playlist(username,"37i9dQZF1DWYiR2Uqcon0X")
-# tracks = sourcePlaylist["tracks"]
-# songs = tracks["items"]
-#
-# while tracks['next']:
-#     tracks = Spotifyobj.next(tracks)
-#     for item in tracks["items"]:
-#         songs.append(item)
-# ids = []
-#
-# print("Songs Added: {}".format(str(len(songs))))
-# print(songs[0]['track']['id'])
-# add_to_bad_playlist(songs)
-
-# i = 0
-# for i in range(len(songs)):
-#     Spotifyobj.user_playlist_add_tracks(username,, [songs[i]["track"]["id"]])
 
 def add_to_bad_playlist():
     badMusic = ["37i9dQZF1DWTcqUzwhNmKv","37i9dQZF1DX1lVhptIYRda",
@@ -162,9 +50,45 @@ def add_to_bad_playlist():
         tracks = sourcePlaylist["tracks"]
         songs = tracks["items"]
         while tracks["next"]:
-            songs.append([x for x in tracks['items']])
+            songs += [x for x in tracks['items']]
         for i in range(len(songs)):
             Spotifyobj.user_playlist_add_tracks(username, badPlaylistId, [songs[i]["track"]["id"]])
         print("Songs Added: {}".format(str(len(songs))))
         print(songs[0]['track']['id'])
 
+##FUNCTION ABOVE ADDS BAD SONGS FUNCTION BELOW ADDS GOOD SONGS
+
+
+def addGoodSongs():
+    ######THIS PORTION WILL ADD GOOD PLAYLISTS TO THE GOODPLAYLIST playlist, and once this is done we compare them
+    # mint playlist id : 37i9dQZF1DX4dyzvuaRJ0n
+    # GoodPlaylist id is : 4cAyKcVe0iUmFoorM3XpEL
+    # Bass Arcade ID : 37i9dQZF1DX0hvSv9Rf41p
+    # Dance Rewind Playlist ID: 37i9dQZF1DX0BcQWzuB7ZO
+    # Night Rider Playlist ID: 37i9dQZF1DX6GJXiuZRisr
+    goodPlaylistIds = []
+    goodPlaylistIds.append("37i9dQZF1DX4dyzvuaRJ0n")
+    goodPlaylistIds.append("37i9dQZF1DX0hvSv9Rf41p")
+    goodPlaylistIds.append("37i9dQZF1DX0BcQWzuB7ZO")
+    goodPlaylistIds.append("37i9dQZF1DX6GJXiuZRisr")
+    goodPlaylistIds.append("4cAyKcVe0iUmFoorM3XpEL")
+
+    for x in range(len(goodPlaylistIds)):
+        sourcePlaylist = Spotifyobj.user_playlist(username,goodPlaylistIds[x])
+        tracks = sourcePlaylist["tracks"]
+        songs = tracks["items"]
+
+        while tracks['next']:
+            tracks = Spotifyobj.next(tracks)
+            for item in tracks["items"]:
+                songs.append(item)
+        ids = []
+
+        print("Songs Added to Good Songs: {}".format(str(len(songs))))
+        print(songs[0]['track']['id'])
+        i = 0
+        for i in range(len(songs)):
+            Spotifyobj.user_playlist_add_tracks(username, "4cAyKcVe0iUmFoorM3XpEL", [songs[i]["track"]["id"]])
+
+
+addGoodSongs()
