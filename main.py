@@ -23,8 +23,8 @@ secret = "55bbc589f0d64cd0b711b309320c5f98"
 scope = "user-library-read playlist-read-private playlist-modify-private playlist-read-collaborative playlist-modify-public"
 redirectURI = 'http://google.com/'
 username = 'ahmadaram34'
-badPlaylistId = '4SVPwFqykhFf5fqiIIBc21'
-goodPlaylistId = '4cAyKcVe0iUmFoorM3XpEL'
+badPlaylistId = '50U9rtNbvgVVzj3ujj3W6E'
+goodPlaylistId = '6UWatUup3LEpGIlQWyXz2N'
 
 # this gets the authentiaction token for us to access the account through spotify
 try:
@@ -45,17 +45,15 @@ print(user)
 
 
 def add_to_bad_playlist():
-    badMusic = ["37i9dQZF1DWTcqUzwhNmKv", "37i9dQZF1DX1lVhptIYRda",
-                "37i9dQZF1DX0MuOvUqmxDz", "37i9dQZF1DX8S0uQvJ4gaa",
-                "37i9dQZF1DX0MuOvUqmxDz", "37i9dQZF1DWYiR2Uqcon0X"]
+    badMusic = ["37i9dQZF1DX1lVhptIYRda","5YSpQCyxpQ84Jv9AedJMBQ"]
     for playlist in badMusic:
         sourcePlaylist = Spotifyobj.user_playlist(username, playlist)
         tracks = sourcePlaylist["tracks"]
         songs = tracks["items"]
-        while tracks["next"]:
+        while tracks['next']:
             tracks = Spotifyobj.next(tracks)
             for item in tracks["items"]:
-                songs.append
+                songs.append(item)
         ids = []
         print(len(songs))
         print(songs[0]['track']['id'])
@@ -65,17 +63,16 @@ def add_to_bad_playlist():
 
 
 def add_to_good_playlist():
-    goodMusic = {"37i9dQZF1DX4dyzvuaRJ0n", "37i9dQZF1DX0BcQWzuB7ZO", "37i9dQZF1DX8tZsk68tuDw",
-                 "37i9dQZF1DX0hvSv9Rf41p", "37i9dQZF1DXaXB8fQg7xif", "37i9dQZF1DXcZDD7cfEKhW"}
+    goodMusic = {"37i9dQZEVXbLRQDuF5jeBp"}
 
     for playlist in goodMusic:
         sourcePlaylist = Spotifyobj.user_playlist(username, playlist)
         tracks = sourcePlaylist["tracks"]
         songs = tracks["items"]
-        while tracks["next"]:
+        while tracks['next']:
             tracks = Spotifyobj.next(tracks)
             for item in tracks["items"]:
-                songs.append
+                songs.append(item)
         ids = []
         print(len(songs))
         print(songs[0]['track']['id'])
@@ -94,9 +91,10 @@ def getGoodSongsIdFeatures():
         for item in good_trackList["items"]:
             good_songList.append(item)
     goodSongIDs = []
-    for i in range(len(good_songList) - 500):
+    for i in range(len(good_songList)):
+    #for i in range(len(good_songList) - 500):
         goodSongIDs.append(good_songList[i]['track']['id'])
-    #print(goodSongIDs)
+    print(goodSongIDs)
 
     features = []
     for i in range(0, len(goodSongIDs)):
@@ -116,9 +114,10 @@ def bad_playlist_idsFeatures():
         tracks = Spotifyobj.next(tracks)
         songs += [x for x in tracks['items']]
     ids = []
-    for i in range(len(songs) - 500):
+    for i in range(len(songs)):#only need minus
+    #for i in range(len(songs) - 500):
         ids.append(songs[i]['track']['id'])
-    #print(ids)
+    print(ids)
 
     features = []
     for i in range(0, len(ids)):
@@ -139,7 +138,7 @@ def TrainTestClassification(goodSongFeatures,badSongFeatures):
     trainingData = panda.concat(merge)
     #trainingData = panda.merge(bad,good)
 
-    train,test = train_test_split(trainingData,test_size=0.40)
+    train,test = train_test_split(trainingData,test_size=0.20)
     features = ["danceability","loudness","valence","acousticness","key"]
     train1 = train[features]
     train2 = train["target"]
@@ -152,6 +151,11 @@ def TrainTestClassification(goodSongFeatures,badSongFeatures):
     accy = accuracy_score(test2,predict1) *100
     print("Accuracy for Decision Tree:",round(accy,1),"%")
 
+    knn = KNeighborsClassifier(3)
+    knn.fit(train1,train2)
+    knn_pred = tree.predict(test1)
+    score = accuracy_score(test2,knn_pred)*100
+    print("KNN IS ",round(score,1),"%")
 
 
 
@@ -161,6 +165,7 @@ print("ADDING TO GOOD SONGS")
 #add_to_good_playlist()
 print("GETTING GOOD SONGS")
 goodSongFeatures = getGoodSongsIdFeatures()
+print("GETTING BAD SONGS FEATURES")
 badSongFeatures = bad_playlist_idsFeatures()
 TrainTestClassification(goodSongFeatures,badSongFeatures)
 
