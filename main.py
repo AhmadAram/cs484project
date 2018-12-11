@@ -55,7 +55,7 @@ def add_to_bad_playlist():
         while tracks["next"]:
             tracks = Spotifyobj.next(tracks)
             for item in tracks["items"]:
-                songs.append
+                songs.append(item)
         ids = []
         print(len(songs))
         print(songs[0]['track']['id'])
@@ -75,7 +75,7 @@ def add_to_good_playlist():
         while tracks["next"]:
             tracks = Spotifyobj.next(tracks)
             for item in tracks["items"]:
-                songs.append
+                songs.append(item)
         ids = []
         print(len(songs))
         print(songs[0]['track']['id'])
@@ -94,7 +94,7 @@ def getGoodSongsIdFeatures():
         for item in good_trackList["items"]:
             good_songList.append(item)
     goodSongIDs = []
-    for i in range(len(good_songList) - 500):
+    for i in range(len(good_songList)):
         goodSongIDs.append(good_songList[i]['track']['id'])
     #print(goodSongIDs)
 
@@ -125,7 +125,7 @@ def bad_playlist_idsFeatures():
         audiofeatures = Spotifyobj.audio_features(ids[i:i + 50])
         for track in audiofeatures:
             features.append(track)
-            features[-1]['target'] = 1
+            features[-1]['target'] = 0
     print(features)
     #print(features)
     return features
@@ -147,7 +147,7 @@ def TrainTestClassification(goodSongFeatures,badSongFeatures):
     test2 = test["target"]
 
     tree = DecisionTreeClassifier(min_samples_split=100)
-    decisionTree = tree.fit(train1,train2)
+    tree.fit(train1,train2)
     predict1 = tree.predict(test1)
     accy = accuracy_score(test2,predict1) *100
     print("Accuracy for Decision Tree:",round(accy,1),"%")
@@ -164,18 +164,6 @@ goodSongFeatures = getGoodSongsIdFeatures()
 badSongFeatures = bad_playlist_idsFeatures()
 TrainTestClassification(goodSongFeatures,badSongFeatures)
 
-
-
-
-if not os.path.exists('goodFeatures.dat'):
-    pickle.dump(goodSongFeatures, open('goodFeatures.dat', 'wb+'))
-else:
-    goodFeatures = pickle.load(open('goodFeatures.dat', 'rb'))
-
-if not os.path.exists('badFeatures.dat'):
-    pickle.dump(badSongFeatures, open('badFeatures.dat', 'wb+'))
-else:
-    badFeatures = pickle.load(open('badFeatures.dat', 'rb'))
 
 goodFrame = pd.DataFrame(goodSongFeatures)
 badFrame = pd.DataFrame(badSongFeatures)
