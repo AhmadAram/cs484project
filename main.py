@@ -1,21 +1,14 @@
 # import pyechonest
-import spotipy
-import spotipy.util as utility
-import sys
 import os
-import webbrowser
-import json
-from json.decoder import JSONDecodeError
-import pandas as pd
-import matplotlib.pyplot as plt
 import pickle
 
+import matplotlib.pyplot as plt
+import pandas as panda
+import pandas as pd
+import spotipy
+import spotipy.util as utility
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
-import pandas as panda
-from sklearn.neighbors import KNeighborsClassifier
-
-# username = sys.argv[1]
 from sklearn.tree import DecisionTreeClassifier
 
 clientId = "ce7456ff192c41a28dd9b8bc55bb845c"
@@ -56,10 +49,8 @@ def add_to_bad_playlist():
             tracks = Spotifyobj.next(tracks)
             for item in tracks["items"]:
                 songs.append
-        ids = []
         print(len(songs))
         print(songs[0]['track']['id'])
-        i = 0
         for i in range(len(songs)):
             Spotifyobj.user_playlist_add_tracks(username, badPlaylistId, [songs[i]["track"]["id"]])
 
@@ -76,10 +67,8 @@ def add_to_good_playlist():
             tracks = Spotifyobj.next(tracks)
             for item in tracks["items"]:
                 songs.append
-        ids = []
         print(len(songs))
         print(songs[0]['track']['id'])
-        i = 0
         for i in range(len(songs)):
             Spotifyobj.user_playlist_add_tracks(username, goodPlaylistId, [songs[i]["track"]["id"]])
 
@@ -96,7 +85,7 @@ def getGoodSongsIdFeatures():
     goodSongIDs = []
     for i in range(len(good_songList) - 500):
         goodSongIDs.append(good_songList[i]['track']['id'])
-    #print(goodSongIDs)
+    # print(goodSongIDs)
 
     features = []
     for i in range(0, len(goodSongIDs)):
@@ -107,7 +96,9 @@ def getGoodSongsIdFeatures():
     print(features)
     return features
 
-    #print(features)
+    # print(features)
+
+
 def bad_playlist_idsFeatures():
     tracks = Spotifyobj.user_playlist(username, badPlaylistId)['tracks']
     songs = tracks['items']
@@ -118,7 +109,7 @@ def bad_playlist_idsFeatures():
     ids = []
     for i in range(len(songs) - 500):
         ids.append(songs[i]['track']['id'])
-    #print(ids)
+    # print(ids)
 
     features = []
     for i in range(0, len(ids)):
@@ -127,34 +118,31 @@ def bad_playlist_idsFeatures():
             features.append(track)
             features[-1]['target'] = 1
     print(features)
-    #print(features)
+    # print(features)
     return features
 
 
-
-def TrainTestClassification(goodSongFeatures,badSongFeatures):
+def TrainTestClassification(goodSongFeatures, badSongFeatures):
     trainingData = panda.DataFrame(goodSongFeatures)
-    train,test = train_test_split(trainingData,test_size=0.25)
-    features = ["danceability","loudness","valence","acousticness","key"]
+    train, test = train_test_split(trainingData, test_size=0.25)
+    features = ["danceability", "loudness", "valence", "acousticness", "key"]
     train1 = train[features]
     train2 = train["target"]
     test1 = test[features]
     test2 = test["target"]
 
     tree = DecisionTreeClassifier(min_samples_split=50)
-    decisionTree = tree.fit(train1,train2)
+    decisionTree = tree.fit(train1, train2)
     predict1 = tree.predict(test1)
-    accy = accuracy_score(test2,predict1) *100
-    print("Accuracy for Decision Tree:",round(accy,1),"%")
+    accy = accuracy_score(test2, predict1) * 100
+    print("Accuracy for Decision Tree:", round(accy, 1), "%")
 
-#add_to_bad_playlist()
-#add_to_good_playlist()
+
+# add_to_bad_playlist()
+# add_to_good_playlist()
 goodSongFeatures = getGoodSongsIdFeatures()
 badSongFeatures = bad_playlist_idsFeatures()
-TrainTestClassification(goodSongFeatures,badSongFeatures)
-
-
-
+TrainTestClassification(goodSongFeatures, badSongFeatures)
 
 if not os.path.exists('goodFeatures.dat'):
     pickle.dump(goodSongFeatures, open('goodFeatures.dat', 'wb+'))
@@ -170,7 +158,7 @@ goodFrame = pd.DataFrame(goodSongFeatures)
 badFrame = pd.DataFrame(badSongFeatures)
 
 # print(goodFrame)
-_,ax = plt.subplots()
+_, ax = plt.subplots()
 ax.set_xlabel('valence')
 ax.set_ylabel('features')
 ax.set_title(r'Good Song Valence')
