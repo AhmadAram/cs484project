@@ -14,6 +14,7 @@ scope = "user-library-read playlist-read-private playlist-modify-private playlis
 redirectURI = 'http://google.com/'
 username = 'ahmadaram34'
 badPlaylistId = '4SVPwFqykhFf5fqiIIBc21'
+goodPlaylistId = '4cAyKcVe0iUmFoorM3XpEL'
 
 # this gets the authentiaction token for us to access the account through spotify
 try:
@@ -50,11 +51,32 @@ def add_to_bad_playlist():
         tracks = sourcePlaylist["tracks"]
         songs = tracks["items"]
         while tracks["next"]:
-            songs += [x for x in tracks['items']]
-        for i in range(len(songs)):
-            Spotifyobj.user_playlist_add_tracks(username, badPlaylistId, [songs[i]["track"]["id"]])
-        print("Songs Added: {}".format(str(len(songs))))
+            tracks = Spotifyobj.next(tracks)
+            for item in tracks["items"]:
+                songs.append
+        ids = []
+        print(len(songs))
         print(songs[0]['track']['id'])
+        for i in range(len(songs)):
+            Spotifyobj.user_playlist_add_tracks(username,badPlaylistId,[songs[i]["track"]["id"]])
+
+def add_to_good_playlist():
+    goodMusic = {"37i9dQZF1DX4dyzvuaRJ0n","37i9dQZF1DX0BcQWzuB7ZO","37i9dQZF1DX8tZsk68tuDw",
+                 "37i9dQZF1DX0hvSv9Rf41p","37i9dQZF1DXaXB8fQg7xif","37i9dQZF1DXcZDD7cfEKhW"}
+
+    for playlist in goodMusic:
+        sourcePlaylist = Spotifyobj.user_playlist(username, playlist)
+        tracks = sourcePlaylist["tracks"]
+        songs = tracks["items"]
+        while tracks["next"]:
+            tracks = Spotifyobj.next(tracks)
+            for item in tracks["items"]:
+                songs.append
+        ids = []
+        print(len(songs))
+        print(songs[0]['track']['id'])
+        for i in range(len(songs)):
+            Spotifyobj.user_playlist_add_tracks(username,goodPlaylistId,[songs[i]["track"]["id"]])
 
 ##FUNCTION ABOVE ADDS BAD SONGS FUNCTION BELOW ADDS GOOD SONGS
 
@@ -92,3 +114,6 @@ def addGoodSongs():
 
 
 addGoodSongs()
+
+#add_to_bad_playlist()
+add_to_good_playlist()
