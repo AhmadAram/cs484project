@@ -149,7 +149,7 @@ def TrainTestClassification(goodSongFeatures,badSongFeatures):
     graphs(trainingData, 'tempo', 'Good and Bad Song Tempo', 'Number of Features', 'Tempo', 0.7, 30, 'good songs', 'bad songs')
     graphs(trainingData, 'valence', 'Valence of Songs', 'Number of Features', 'Valence', 0.5, 30, 'good songs', 'bad songs')
     graphs(trainingData, 'loudness', 'Loudness of Songs', 'Number of Features', 'Loudness', 0.5, 30, 'good songs', 'bad songs')
-    graphs(trainingData, 'trackPopularity', 'Popularity of Songs', 'Number of Features', 'Popularity', 0.5, 30, 'good songs', 'bad songs')
+    graphs(trainingData, 'danceability', 'Danceability of Songs', 'Number of Features', 'Danceability', 0.5, 30, 'good songs', 'bad songs')
     graphs(trainingData, 'key', 'Key Signature of Songs', 'Number of Features', 'Key', 0.5, 30, 'good songs', 'bad songs')
 
 
