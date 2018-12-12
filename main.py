@@ -35,7 +35,8 @@ print(user)
 def add_to_bad_playlist():
     badMusic = ["37i9dQZF1DWTcqUzwhNmKv", "37i9dQZF1DX1lVhptIYRda",
                 "37i9dQZF1DX0MuOvUqmxDz", "37i9dQZF1DX8S0uQvJ4gaa",
-                "37i9dQZF1DX0MuOvUqmxDz", "37i9dQZF1DWYiR2Uqcon0X"]
+                "37i9dQZF1DX0MuOvUqmxDz", "37i9dQZF1DWYiR2Uqcon0X","37i9dQZF1DXcF6B6QPhFDv",
+                "37i9dQZF1DX1rVvRgjX59F","37i9dQZF1DX9wa6XirBPv8","37i9dQZF1DX8FwnYE6PRvL"]
     for playlist in badMusic:
         sourcePlaylist = Spotifyobj.user_playlist(username, playlist)
         tracks = sourcePlaylist["tracks"]
@@ -54,7 +55,8 @@ def add_to_bad_playlist():
 
 def add_to_good_playlist():
     goodMusic = {"37i9dQZF1DX4dyzvuaRJ0n", "37i9dQZF1DX0BcQWzuB7ZO", "37i9dQZF1DX8tZsk68tuDw",
-                 "37i9dQZF1DX0hvSv9Rf41p", "37i9dQZF1DXaXB8fQg7xif", "37i9dQZF1DXcZDD7cfEKhW"}
+                 "37i9dQZF1DX0hvSv9Rf41p", "37i9dQZF1DXaXB8fQg7xif", "37i9dQZF1DXcZDD7cfEKhW","37i9dQZF1EjeLcYjOfywyU",
+                 "3LiHlnnWae4GaeJ5mfZacG","37i9dQZF1DWUa8ZRTfalHk","37i9dQZF1DX3WvGXE8FqYX"}
 
     for playlist in goodMusic:
         sourcePlaylist = Spotifyobj.user_playlist(username, playlist)
