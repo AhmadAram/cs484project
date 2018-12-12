@@ -114,11 +114,11 @@ def bad_playlist_idsFeatures():
     return features
 
 
-def graphs(data, type, title, x=None, y=None, *args):
+def graphs(data, type, title, label, *args):
     fig = plt.figure(figsize=(12, 8))
     plt.title(title)
-    plt.xlabel(x)
-    plt.ylabel(y)
+    plt.xlabel(label)
+    plt.ylabel('Number of Features')
     data[data['target'] == 1][type].hist(alpha=args[0], bins=args[1], label=args[2])
     data[data['target'] == 0][type].hist(alpha=args[0], bins=args[1], label=args[3])
     plt.legend(loc='upper right')
@@ -146,11 +146,11 @@ def TrainTestClassification(goodSongFeatures,badSongFeatures):
     accy = accuracy_score(test2,predict1) *100
     print("Accuracy for Decision Tree:",round(accy,1),"%")
 
-    graphs(trainingData, 'tempo', 'Good and Bad Song Tempo', 'Number of Features', 'Tempo', 0.7, 30, 'good songs', 'bad songs')
-    graphs(trainingData, 'valence', 'Valence of Songs', 'Number of Features', 'Valence', 0.5, 30, 'good songs', 'bad songs')
-    graphs(trainingData, 'loudness', 'Loudness of Songs', 'Number of Features', 'Loudness', 0.5, 30, 'good songs', 'bad songs')
-    graphs(trainingData, 'danceability', 'Danceability of Songs', 'Number of Features', 'Danceability', 0.5, 30, 'good songs', 'bad songs')
-    graphs(trainingData, 'key', 'Key Signature of Songs', 'Number of Features', 'Key', 0.5, 30, 'good songs', 'bad songs')
+    graphs(trainingData, 'tempo', 'Good and Bad Song Tempo','Tempo', 0.7, 30, 'good songs', 'bad songs')
+    graphs(trainingData, 'valence', 'Valence of Songs','Valence', 0.5, 30, 'good songs', 'bad songs')
+    graphs(trainingData, 'loudness', 'Loudness of Songs','Loudness', 0.5, 30, 'good songs', 'bad songs')
+    graphs(trainingData, 'danceability', 'Danceability of Songs','Danceability', 0.5, 30, 'good songs', 'bad songs')
+    graphs(trainingData, 'key', 'Key Signature of Songs','Key', 0.5, 30, 'good songs', 'bad songs')
 
 
 print("ADDING SONGS TO BAD SONGS")
